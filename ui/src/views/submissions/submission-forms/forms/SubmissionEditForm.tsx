@@ -523,7 +523,6 @@ class SubmissionEditForm extends React.Component<Props, SubmissionEditFormState>
 
   handleAltTextChange(record: FileRecord, altText: string) {
     const altTexts = this.state.altTexts;
-    const altTextLength = altText.length;
     altTexts[record.location] = altText;
     this.setState({ altTexts, touched: true });
   }
@@ -646,7 +645,7 @@ class SubmissionEditForm extends React.Component<Props, SubmissionEditFormState>
                       bodyStyle={{ padding: '0' }}
                     >
                       <Input
-                        placeholder="test"
+                        placeholder="Alt text"
                         value={this.state.altTexts[submission.primary.location]}
                         onChange={e => this.handleAltTextChange(submission.primary, e.target.value)}
                       />
