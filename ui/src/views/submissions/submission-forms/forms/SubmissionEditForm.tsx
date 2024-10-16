@@ -523,8 +523,13 @@ class SubmissionEditForm extends React.Component<Props, SubmissionEditFormState>
 
   handleAltTextChange(record: FileRecord, altText: string) {
     const altTexts = this.state.altTexts;
+    const altTextLength = altText.length;
     altTexts[record.location] = altText;
     this.setState({ altTexts, touched: true });
+  }
+
+  getAltTextLength(text: string):number {
+    return text.length
   }
 
   componentWillUnmount() {
@@ -641,10 +646,13 @@ class SubmissionEditForm extends React.Component<Props, SubmissionEditFormState>
                       bodyStyle={{ padding: '0' }}
                     >
                       <Input
-                        placeholder="Alt text"
+                        placeholder="test"
                         value={this.state.altTexts[submission.primary.location]}
                         onChange={e => this.handleAltTextChange(submission.primary, e.target.value)}
                       />
+                      <div className="">
+                        <p>{this.getAltTextLength(this.state.altTexts[submission.primary.location])}</p>
+                      </div>
                     </Card>
                     <Card
                       className="flex-1 ml-2 file-card"
@@ -734,7 +742,7 @@ class SubmissionEditForm extends React.Component<Props, SubmissionEditFormState>
                               className="w-1/4"
                               type="inner"
                               actions={[
-                                <Icon type="delete" onClick={() => this.removeAdditionalFile(f)} />
+                                <Icon type="delete" onClick={() => this.removeAdditionalFile(f)} />,
                               ]}
                               cover={
                                 <img
@@ -754,17 +762,20 @@ class SubmissionEditForm extends React.Component<Props, SubmissionEditFormState>
                                 treeData={this.getWebsiteTreeData(
                                   status =>
                                     !!WebsiteRegistry.websites[status.website]
-                                      .supportsAdditionalFiles
+                                      .supportsAdditionalFiles,
                                 )}
                                 onChange={value => this.handleAdditionalIgnoredAccounts(f, value)}
                                 placeholder="Ignored accounts"
                                 maxTagCount={0}
                               />
-                              <Input
-                                placeholder="Alt text"
-                                value={this.state.altTexts[f.location]}
-                                onChange={e => this.handleAltTextChange(f, e.target.value)}
-                              />
+                              <div style={{display:"flex", flexDirection:"row"}}>
+                                <Input
+                                  placeholder="Alt text"
+                                  value={this.state.altTexts[f.location]}
+                                  onChange={e => this.handleAltTextChange(f, e.target.value)}
+                                />
+                                <p>{this.getAltTextLength(this.state.altTexts[f.location])}</p>
+                              </div>
                             </Card>
                           );
                         })}
@@ -775,7 +786,7 @@ class SubmissionEditForm extends React.Component<Props, SubmissionEditFormState>
                     uploadCallback={this.fallbackUploadChange.bind(this)}
                     submission={submission}
                     websites={this.getSelectedWebsiteParts().map(
-                      p => WebsiteRegistry.websites[p.website]
+                      p => WebsiteRegistry.websites[p.website],
                     )}
                   />
                 </Form.Item>
@@ -910,7 +921,7 @@ class SubmissionEditForm extends React.Component<Props, SubmissionEditFormState>
                   parts: _.cloneDeep(this.original.parts),
                   removedParts: [],
                   postAt: this.original.submission.schedule.postAt,
-                  touched: false
+                  touched: false,
                 });
 
                 this.checkProblems();
